@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+        
+    
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+	    <!-- Shiro的核心安全接口,这个属性是必须的 -->  
+	    <property name="securityManager" ref="securityManager"/>  
+	    <!-- 登录页面 -->  
+	    <property name="loginUrl" value="/login"/>  
+	    <!-- 登录成功后要跳转的连接 -->  
+	    <property name="successUrl" value="/"/>
+	    <!-- 用户访问未对其授权的资源时,所显示的连接 -->  
+	    <property name="unauthorizedUrl" value="/unAuth"/>  
+	    <!-- Shiro连接约束配置,即过滤链的定义 -->  
+	    <property name="filterChainDefinitions">  
+	        <value>  
+              /login=anon  <!-- 跳到登录页面匿名 -->
+              /doLogin=anon <!-- 执行登录的URL匿名  -->
+              <!--静态资源需要匿名访问  -->
+              /images/**=anon
+              /js/**=anon
+              /css/**=anon
+              <!-- 基于角色 -->
+              /huiyuan**=roles[huiyuan] <!-- /huiyuan这个资源只有角色为huiyuan的用户才能进入 -->
+              /feihy**=roles[feihy]     <!-- /feihy这个资源只有角色为feihy的用户才能进入 -->
+              <!-- 基于资源(权限) -->
+              /hyselect**=perms[huiyuan:select]  <!-- /hyselect这个资源只有权限为huiyuan:select的用户才能进入 -->
+              /fhyselect**=perms[feihy:select]   <!-- /fhyselect这个资源只有权限为feihy:select的用户才能进入 -->
+              /**=authc      <!-- 所有的资源必须认证登录，必须放在最下面 -->
+	        </value>  
+	    </property>
+	</bean>  
+    <!-- securityManage管理配置 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
+	    <property name="realm" ref="myShiro"/>  
+	</bean> 
+	<!-- 自定义Realm -->
+    <bean id="myShiro" class="com.kongzhong.gw2.springshiro.service.MyShiro"/>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>  
+      
+</beans>
