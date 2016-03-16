@@ -6,7 +6,7 @@
 
 	<bean id="logger" class="com.kongzhong.external.log.KongzhongLogger">
 		<property name="appId" value="168" />
-		<property name="submitUrl" value="http://inf.hdservice.kongzhong.com/remoting/AppExceptionService" />
+		<property name="submitUrl" value="http://insdff.hdsdfsfsersdfsfvice.ksdfsdfongzhong.com/remoting/AppExceptionService" />
 	</bean>
 
 	<bean id="handlerExceptionResolver" class="com.kongzhong.external.log.KongzhongExceptionHandler">
